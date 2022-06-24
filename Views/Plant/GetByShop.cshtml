@@ -1,0 +1,67 @@
+﻿@model GetByShopPVM
+
+
+<br />
+<br />
+
+<div>
+    @using (Html.BeginForm("Plant", "Get", FormMethod.Post))
+
+        @foreach (var shop in Model.Query)
+        {
+            @foreach (var plant in shop.ShopPlant)
+            {
+            <div onclick="getInfoPlant('@plant.PlantId')">
+                <div class="card">
+                    <div class="container">
+                        @if (plant.Plant.PhotoPath != null)
+                        {
+
+                            <img src="~/img/@plant.Plant.PhotoPath " alt="@plant.Plant.PlantName" />
+                        }
+                        else
+                        {
+                            if (plant.Plant.TypeOfPlant == "bush")
+                            {
+                                <img src="~/img/bush.jpg" alt="bush" />
+                            }
+                            else if (plant.Plant.TypeOfPlant == "flower")
+                            {
+                                <img src="~/img/flower.jpg" alt="flower" />
+                            }
+                            else if (plant.Plant.TypeOfPlant == "tree")
+                            {
+                                <img src="~/img/tree.png" alt="tree" />
+                            }
+                        }
+                    <p>
+                        <h>@Html.DisplayNameFor(model => model.PlantName)</h>: @plant.Plant.PlantName
+
+                        <br />
+                        <h>@Html.DisplayNameFor(model => model.Price)</h>: @plant.Plant.Price
+                        <br />
+                        <h>@Html.DisplayNameFor(model => model.ShopName)</h>:
+
+                        @foreach (var currentShop in plant.Plant.ShopPlant)
+                        {
+                            <a asp-controller="Shop" asp-action="Details" asp-route-id="@currentShop.ShopId">
+
+                                @currentShop.Shop.ShopName
+                            </a>
+                        }
+                    </p>
+                    </div>
+                </div>
+            </div>
+            <br />
+            }
+        }
+
+</div>
+
+
+<script>
+    const getInfoPlant = id => {
+        window.location = `/Plant/InfoPlant?id=${id}`
+    }
+</script>
